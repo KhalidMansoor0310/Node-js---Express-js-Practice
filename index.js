@@ -3,6 +3,7 @@ const path = require("path");
 const http = require("http");
 const port = 5000;
 const express = require("express");
+const filter = require("./middleware/Filter");
 const app = express();
 // Server creation using https
 
@@ -78,6 +79,8 @@ const app = express();
 
 const publicPath = path.join(__dirname, "public");
 // app.use(express.static(publicPath));
+// import middleware above and use it here
+app.use(filter);
 
 app.get("/about", (_, res) => {
   res.sendFile(`${publicPath}/about.html`);
@@ -89,6 +92,7 @@ app.get("/services", (_, res) => {
 app.get("*", (_, res) => {
   res.sendFile(`${publicPath}/404.html`);
 });
+
 app.listen(port, (err) => {
   console.log(`app is listening on port ${port}`);
 });
