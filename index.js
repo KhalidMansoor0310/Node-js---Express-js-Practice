@@ -77,9 +77,13 @@ const app = express();
 
 // Now its the time to get static html pages in node js
 
-const publicPath = path.join(__dirname, "public");
+// const publicPath = path.join(__dirname, "public");
 // app.use(express.static(publicPath));
-// import middleware above and use it here
+// import middleware above and use it here for all routes but in case of single route
+// then use have to write it as
+// app.get("/about",filter, (_, res) => {
+//   res.sendFile(`${publicPath}/about.html`);
+// });
 app.use(filter);
 
 app.get("/about", (_, res) => {
@@ -93,6 +97,20 @@ app.get("*", (_, res) => {
   res.sendFile(`${publicPath}/404.html`);
 });
 
+// let say i want to change all images names in directory
+fs.readdir("F:/images", (err, files) => {
+  if (err) throw err.message;
+
+  for (let i = 0; i < files.length; i++) {
+    if (files[i].endsWith(".jpg") || files[i].endsWith(".jpeg")) {
+      const newName = `image-${i}.jpg`;
+      fs.rename(`F:/images/${files[i]}`, `'F:/images/${newName}`, (err) => {
+        if (err) throw err;
+        console.log(`Renamed ${files[i]} to ${newName}`);
+      });
+    }
+  }
+});
 app.listen(port, (err) => {
   console.log(`app is listening on port ${port}`);
 });
